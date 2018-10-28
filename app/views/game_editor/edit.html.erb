@@ -1,0 +1,12 @@
+<%= stylesheet_link_tag 'editor' %>
+<%= javascript_include_tag 'editor' %>
+
+<div class="container-fluid">
+  <div class="row no-gutters">
+    <div class="col-2 bg-light" id="controls">
+    </div>
+
+    <div class="col-10" id="display" data-game-name="<%= @game.name %>">
+    </div>
+  </div>
+</div>

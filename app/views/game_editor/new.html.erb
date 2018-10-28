@@ -1,0 +1,23 @@
+<div class="container">
+  <div class="row align-items-center user-form-row">
+    <div class="col col-lg-4 offset-lg-4">
+      <h1> Choose a name for your game </h1>
+      <div class="spacer"></div>
+      <div class="user-form-container">
+        <%= form_with url: new_game_path do |f| %>
+          <%= f.label :game_name %><br />
+          <%= f.text_field :game_name, autofocus: true %>
+          
+          <div class="spacer"></div>
+          <div class="row">
+            <div class="col col-lg-4 offset-lg-4">
+              <%= f.submit "Submit", class: "btn btn-primary" %>
+            </div>
+          </div>
+        <% end %>
+      </div>
+      <div class="spacer"></div>
+      <h4> Or <a href="<%= editor_path %>"> go back to the dashboard </a> </h4>
+    </div>
+  </div>
+</div>

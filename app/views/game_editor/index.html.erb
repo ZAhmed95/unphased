@@ -1,2 +1,24 @@
-<%= stylesheet_link_tag 'editor' %>
-<%= javascript_include_tag 'editor' %>
+
+Logged in as: <%= current_user.email %>
+<%= link_to 'Log out', destroy_session_path(:user), method: :delete %>
+<section id="home-section-1">
+  <div class="row">
+    <div class="col col-lg-2 offset-lg-5 text-center">
+      <%= link_to 'Create new game!', new_game_path, class: "btn btn-primary btn-lg" %>
+    </div>
+  </div>
+
+  <!-- TODO: only show the existing games section if user has some games -->
+  <div class="row">
+    <div class="col text-center">
+      <h2> Or, edit one of your existing games: </h2>
+    </div>
+  </div>
+  <div class="container">
+    <div class="bg-light" id="games-list">
+      <div class="row no-gutters">
+        <%= render partial: 'game_card', collection: current_user.games, as: 'game' %>
+      </div>
+    </div>
+  </div>
+</section>
