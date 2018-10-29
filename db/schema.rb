@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_10_27_214729) do
+ActiveRecord::Schema.define(version: 2018_10_29_154031) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -40,6 +40,13 @@ ActiveRecord::Schema.define(version: 2018_10_27_214729) do
     t.oid "oid"
     t.string "key"
     t.index ["key"], name: "index_active_storage_postgresql_files_on_key", unique: true
+  end
+
+  create_table "assets", force: :cascade do |t|
+    t.bigint "game_id"
+    t.text "name"
+    t.text "file_type"
+    t.index ["game_id"], name: "index_assets_on_game_id"
   end
 
   create_table "games", force: :cascade do |t|

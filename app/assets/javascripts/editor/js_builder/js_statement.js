@@ -3,11 +3,18 @@ class JSStatement {
     this.code = code;
   }
 
+  export(){
+    return this.to_json();
+  }
+
   to_js(){
     return this.code;
   }
 
   to_json(){
-    return this.code;
+    return {
+      type: 'Statement',
+      code: this.code
+    }
   }
 }

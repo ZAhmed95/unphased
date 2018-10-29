@@ -5,6 +5,7 @@
 $(document).ready(()=>{
   // DOM references
   const body = $('body');
+  const userData = $('#user-data')[0].dataset;
   const display = $('#display');
   const editorContainer = $('#editor-container');
   const testContainer = $('#test-container');
@@ -55,6 +56,36 @@ $(document).ready(()=>{
     currentControl = newControl;
   }
 
+  editor.saveGame = function(event){
+    var authToken = $('#save-game-form>input[name=authenticity_token]')[0].value;
+    console.log(authToken);
+    event.preventDefault();
+    $.ajax(`/editor/save`, {
+      method: 'POST',
+      contentType: 'application/json',
+      data: JSON.stringify({
+        user_id: userData.userId,
+        game_id: userData.gameId,
+        authenticity_token: authToken,
+        game: editor.gamejs.export(),
+      }),
+      success: (response)=>{
+        console.log(response);
+        notify({
+          message: 'Successfully saved game.',
+          type: 'success'
+        })
+      },
+      error: (error)=>{
+        console.log(error);
+        notify({
+          message: "Something went wrong. Could not save game.",
+          type: "danger"
+        })
+      }
+    })
+  }
+
   // adding event listeners to GUI elements
   // on the toolbar:
   $('#test-button').click(editor.testGame);
@@ -68,16 +99,17 @@ $(document).ready(()=>{
   $('#load-map').click(()=>{
     editor.swapControls(controlLoadMap);
   })
+  $('#save-game').click(editor.saveGame);
 
   // on the controls for load assets: 
-  body.on('submit', 'form#assets-form', (event)=>{
-    event.preventDefault();
+  body.on('click', '#load-assets-submit', (event)=>{
     files = $('#input-assets')[0].files;
     if (!files.length){
       notify({
         message: 'Please choose at least one file.',
         type: 'danger'
-      })
+      });
+      return;
     }
     for (let i = 0; i < files.length; i++){
       let file = files[i];
@@ -85,6 +117,8 @@ $(document).ready(()=>{
         editor.gamejs.assets.add(result);
       })
     }
+    // fire the rails ujs form submission
+    Rails.fire($('#load-assets-form')[0], 'submit');
   });
 
   body.on('click', '#control-assets-back', ()=>{
@@ -118,9 +152,14 @@ $(document).ready(()=>{
   // helper functions
   function loadFile(file, callback){
     var typeAndExt = file.type.split('/');
-    let name = file.name.substring(0, file.name.lastIndexOf('.'));
+    let name = file.name;
+    // key is the name without the extension, e.g. if name: "image.png", key: "image"
+    let key = name.substring(0, name.lastIndexOf('.'));
     let type = typeAndExt[0];
     let fileType = typeAndExt[1];
+    callback({name, key, type, fileType});
+    // Below code is for getting actual data in file, as base64 string
+    /*
     var fr = new FileReader();
     fr.addEventListener('load', (event)=>{
       let data = event.target.result;
@@ -129,8 +168,9 @@ $(document).ready(()=>{
         message: `File ${file.name} loaded successfully`,
         type: 'success'
       })
-      callback({name, type, fileType, data});
+      callback({name, key, type, fileType, data});
     });
     (fileType == 'json') ? fr.readAsText(file) : fr.readAsDataURL(file);
+    */
   }
 })

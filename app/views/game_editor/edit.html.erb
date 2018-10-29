@@ -1,6 +1,9 @@
 <%= stylesheet_link_tag 'editor' %>
 <%= javascript_include_tag 'editor' %>
 
+<div id="user-data" data-user-id="<%= current_user.id %>" data-game-id="<%= @game.id %>">
+</div>
+
 <div class="container-fluid" id="editor-container">
   <div class="row no-gutters">
     <div class="col-2 bg-light" id="controls">
@@ -8,6 +11,10 @@
         <div class="menu-btn" id="load-assets">Load Assets!</div>
         <div class="menu-btn" id="load-spritesheets">Load Spritesheets!</div>
         <div class="menu-btn" id="load-map">Load Map!</div>
+        <%= form_with url: '/editor/save', id: 'save-game-form' do |f| %>
+          <div class="menu-btn" id="save-game">Save!</div>
+          <%= f.submit 'Submit' %>
+        <% end %>
       </div>
     </div>
 
@@ -50,6 +57,12 @@
     <input multiple="multiple" type="file" name="assets[]" id="input-assets">
     <input type="submit" class="menu-btn" value="Load!" id="assets-form-submit">
   </form>
+
+  <%= form_with url: '/editor/load-assets', id: 'load-assets-form' do |f| %>
+    <h4>Load Assets:</h4>
+    <%= f.file_field :assets, multiple: true %>
+    <button type="button" class="menu-btn" id="load-assets-submit">Load!</button>
+  <% end %>
 
   <div class="menu-btn" id="control-assets-back">Go back</div>
 </div>

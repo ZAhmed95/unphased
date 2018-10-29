@@ -22,6 +22,12 @@ class PHGame {
     return assets + this.to_js();
   }
 
+  export(){
+    // exports a json object containing all the data built for the game thus far.
+    // from this object, the entire game can be recreated by Unphased
+    return this.to_json();
+  }
+
   to_js(){
     return `
 ${
@@ -50,7 +56,8 @@ game = new Phaser.Game({
     return {
       name: this.name,
       type: 'Game',
-      scenes: this.scenes.map((scene)=>{return scene.to_json()})
+      assets: this.assets.export(),
+      scenes: this.scenes.map((scene)=>{return scene.export()})
     }
   }
 }

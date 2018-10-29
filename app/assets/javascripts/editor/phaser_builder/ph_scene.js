@@ -24,6 +24,10 @@ class PHScene {
     }
   }
 
+  export(){
+    return this.to_json();
+  }
+
   to_js(){
     return `
 class ${this.name} extends Phaser.Scene {
@@ -41,9 +45,9 @@ class ${this.name} extends Phaser.Scene {
     return {
       name: this.name,
       type: 'Scene',
-      preload: this.preload.to_json(),
-      create: this.create.to_json(),
-      update: this.update.to_json(),
+      preload: this.preload.export(),
+      create: this.create.export(),
+      update: this.update.export(),
     }
   }
 }

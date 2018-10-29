@@ -1,16 +1,26 @@
 class PHAssetManager {
   constructor(game){
     this.game = game;
+    this.baseURL = '/game-assets/'
     this.assets = {};
   }
 
   add(config){
+    config.assetManager = this;
     var asset = new PHAsset(config);
     this.assets[asset.name] = asset;
   }
 
   remove(name){
     delete this.assets[name];
+  }
+
+  export(){
+    var output = {};
+    for (let key in this.assets){
+      output[key] = this.assets[key].export();
+    }
+    return output;
   }
 
   buildAssets(){
