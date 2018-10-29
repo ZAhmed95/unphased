@@ -1,4 +1,57 @@
+@import 'main';
+
 #controls, #display {
   height: 100vh;
 }
+
+#controls {
+  padding: 10px;
+}
+
+#editor-container {
+  display: block;
+  padding: 0;
+}
+
+#test-container {
+  display: none;
+}
+
+#test-game {
+  position: absolute;
+  width: 1200px;
+  height: 800px;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+#editor-toolbar, #test-toolbar {
+  background-color: $light;
+  position: fixed;
+  right: -5px;
+  bottom: -5px;
+
+  height: 10vh;
+
+  border-radius: $radius;
+
+  padding: 16px;
+}
+
+#editor-toolbar {
+  width: 300px;
+}
+
+#test-toolbar {
+  width: 150px;
+}
+
+.menu-btn {
+  @extend .btn;
+  @extend .btn-primary;
+  @extend .w-100;
+  margin-bottom: 10px;
+}
+
 

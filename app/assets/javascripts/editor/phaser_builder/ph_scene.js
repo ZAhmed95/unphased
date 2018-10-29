@@ -1,9 +1,27 @@
 class PHScene {
   constructor(config){
+    this.game = config.game;
     this.name = config.name;
     this.preload = new JSFunctionDefinition({name:'preload' , classMethod: true});
     this.create = new JSFunctionDefinition({name:'create' , classMethod: true});
     this.update = new JSFunctionDefinition({name:'update' , classMethod: true, params: ['time','delta']});
+  }
+
+  build(){
+    // create the code to initialize the map
+    if (this.map){
+      let data = this.map.data;
+      // add map creation logic to scene create function
+      let tileSetStatements = data.tilesets.map((tileset)=>{
+        return new JSStatement(
+          `this.map.addTileSetImage('${tileset.image.substring(0,tileset.image.lastIndexOf('.'))}');`
+        );
+      })
+      this.create.statements.splice(0,0, 
+        new JSStatement(`this.map = this.make.tilemap({key: '${this.map.name}'});`), 
+        ...tileSetStatements
+      )
+    }
   }
 
   to_js(){

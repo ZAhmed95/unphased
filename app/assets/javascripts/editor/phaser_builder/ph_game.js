@@ -2,17 +2,24 @@
 class PHGame {
   constructor(config){
     this.name = config.name;
+    this.assets = new PHAssetManager(this);
 
     // default game starts with two scenes: Preloader and Game
     // users can add more
-    const preloaderScene = new PHScene({name: 'PreloaderScene'});
+    const preloaderScene = new PHScene({game: this, name: 'PreloaderScene'});
     // the preloader will immediately start the GameScene when its create function is called
     // user can change which scene it calls
     preloaderScene.create.statements.push(new JSStatement("this.scene.start('GameScene');"));
 
-    const gameScene = new PHScene({name: 'GameScene'});
+    const gameScene = new PHScene({game: this, name: 'GameScene'});
 
     this.scenes = [preloaderScene, gameScene];
+  }
+
+  build(){
+    var assets = this.assets.buildAssets();
+    this.scenes.forEach((scene)=>{scene.build()});
+    return assets + this.to_js();
   }
 
   to_js(){
@@ -23,10 +30,17 @@ ${
   }).join('\n')
 }
 
-new Phaser.Game({
+game = new Phaser.Game({
   type: Phaser.AUTO,
   width: 1200,
   height: 800,
+  parent: parent,
+  physics: {
+    default: 'arcade',
+    arcade: {
+      gravity: {y: 500},
+    }
+  },
   scene: [${this.scenes.map((scene)=>{return scene.name}).join(',')}]
 })
 `

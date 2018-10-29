@@ -1,12 +1,66 @@
 <%= stylesheet_link_tag 'editor' %>
 <%= javascript_include_tag 'editor' %>
 
-<div class="container-fluid">
+<div class="container-fluid" id="editor-container">
   <div class="row no-gutters">
     <div class="col-2 bg-light" id="controls">
+      <div id="control-menu" class="control">
+        <div class="menu-btn" id="load-assets">Load Assets!</div>
+        <div class="menu-btn" id="load-spritesheets">Load Spritesheets!</div>
+        <div class="menu-btn" id="load-map">Load Map!</div>
+      </div>
     </div>
 
     <div class="col-10" id="display" data-game-name="<%= @game.name %>">
     </div>
   </div>
+
+  <div id="editor-toolbar">
+    <div class="row">
+      <div class="col-6" id="test-button">
+        <button type="button" class="menu-btn"> Test! </button>
+      </div>
+      <div class="col-6" id="download-button">
+        <button type="button" class="menu-btn"> Download! </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="container-fluid" id="test-container">
+  <div id="test-game">
+  </div>
+
+  <div id="test-toolbar">
+    <div class="row">
+      <div class="col" id="edit-button">
+        <button type="button" class="menu-btn"> Edit! </button>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- these are the other control panes, they start out hidden -->
+<!-- only one shows at any given time on the controls section -->
+<div id="control-assets" class="control">
+
+  <form action="#" id="assets-form">
+    <h4>Load Assets:</h4>
+    <input multiple="multiple" type="file" name="assets[]" id="input-assets">
+    <input type="submit" class="menu-btn" value="Load!" id="assets-form-submit">
+  </form>
+
+  <div class="menu-btn" id="control-assets-back">Go back</div>
+</div>
+
+<div id="control-load-map" class="control">
+
+  <form action="#" id="load-map-form">
+    <h4> Load map JSON (Tiled format): </h4>
+    <input type="file" name="map" id="input-map">
+    <input type="submit" class="menu-btn" value="Load!" id="map-form-submit">
+  </form>
+
+  <div class="menu-btn" id="control-load-map-back">Go back</div>
 </div>
