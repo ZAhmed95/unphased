@@ -33,7 +33,10 @@ function createGameEditor(config){
       },
       scene: [EditorScene]
     });
-    editor.editScene = editor.scene.scenes[0];
+  }
+
+  editor.getScene = function(){
+    return (editor.editScene || (editor.editScene = editor.scene.scenes[0]));
   }
 
   // editor interface functions, anything the user can do in the GUI to affect the game,
@@ -218,12 +221,26 @@ function createGameEditor(config){
       onload: (result)=>{
         result.frameWidth = frameWidth.value;
         result.frameHeight = frameHeight.value;
+        // add the new spritesheet key to assets
         editor.gamejs.assets.set(result);
-        editor.currentScene.player = {
-          startX: 50,
-          startY: 50,
-          key: result.key
+        // if the scene already had a player:
+        if (editor.currentScene.player){
+          let player = editor.currentScene.player;
+          // remove the old spritesheet asset
+          editor.gamejs.assets.remove(player.key);
+          // update player asset key
+          player.key = result.key;
         }
+        else {
+          // if there wasn't already a player, create a new one
+          // with arbitrary spawn position
+          editor.currentScene.player = {
+            startX: 50,
+            startY: 50,
+            key: result.key
+          }
+        }
+        
         Rails.fire($('#load-player-spritesheet-form')[0], 'submit');
         notify({
           message: "Added player.",
@@ -234,6 +251,19 @@ function createGameEditor(config){
   });
 
   body.on('click', '#control-add-player-back', ()=>{
+    editor.swapControls(controlMenu);
+  });
+
+  // on the controls for edit player:
+  body.on('click', '#control-player-spawn', ()=>{
+    editor.getScene().updatingPlayer = true;
+  });
+
+  body.on('click', '#control-player-change-spritesheet', ()=>{
+    editor.swapControls(controlAddPlayer);
+  });
+
+  body.on('click', '#control-player-back', ()=>{
     editor.swapControls(controlMenu);
   });
 

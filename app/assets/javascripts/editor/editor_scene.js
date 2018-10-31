@@ -66,6 +66,16 @@ function createEditorScene(config){
       if (sceneConfig.player){
         let player = sceneConfig.player;
         this.player = this.physics.add.sprite(player.startX, player.startY, player.key);
+        this.updatingPlayer = false;
+        // if player position is being updated, and mouse button is pressed:
+        this.input.on('pointerdown', (pointer)=>{
+          if (this.updatingPlayer) {
+            this.updatingPlayer = false;
+            // update player position
+            editor.currentScene.player.startX = this.player.x;
+            editor.currentScene.player.startY = this.player.y;
+          }
+        });
       }
 
       // create UI text for mouse movement
@@ -85,6 +95,10 @@ function createEditorScene(config){
           ui.tileX.setText(`tileX: ${tileX}`);
           ui.tileY.setText(`tileY: ${tileY}`);
         }
+        if (this.updatingPlayer){
+          this.player.x = x;
+          this.player.y = y;
+        }
       });
     }
     update(time,delta){
@@ -92,6 +106,9 @@ function createEditorScene(config){
       delta /= 1000;
       // check if we need to move the camera based on mouse position
       this.moveCamera(delta);
+
+      // check if player's position is being updated (if there is a player)
+      if (this.player) this.movePlayer();
     }
 
     // helper functions
@@ -137,6 +154,12 @@ function createEditorScene(config){
         editor.currentScene.camera.scrollX = this.cam.scrollX;
         editor.currentScene.camera.scrollY = this.cam.scrollY;
         moved = false;
+      }
+    }
+
+    movePlayer(){
+      if (this.updatingPlayer){
+
       }
     }
   }

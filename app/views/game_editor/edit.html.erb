@@ -9,7 +9,6 @@
     <div class="col-2 bg-light" id="controls">
       <div id="control-menu" class="control">
         <div class="menu-btn" id="load-assets">Load Assets!</div>
-        <div class="menu-btn" id="load-spritesheets">Load Spritesheets!</div>
         <div class="menu-btn" id="load-map">Load Map!</div>
         <div class="menu-btn" id="add-player">Player</div>
         <%= form_with url: save_game_path(@game), id: 'save-game-form' do |f| %>
@@ -44,7 +43,7 @@
     <button type="button" class="menu-btn" id="load-assets-submit">Load!</button>
   <% end %>
 
-  <div class="menu-btn" id="control-assets-back">Go back</div>
+  <button class="menu-btn" id="control-assets-back">Go back</button>
 </div>
 
 <div id="control-load-map" class="control">
@@ -55,7 +54,7 @@
     <button type="button" class="menu-btn" id="load-map-submit">Load!</button>
   <% end %>
 
-  <div class="menu-btn" id="control-load-map-back">Go back</div>
+  <button class="menu-btn" id="control-load-map-back">Go back</button>
 </div>
 
 <div id="control-add-player" class="control">
@@ -69,9 +68,14 @@
     <button type="button" class="menu-btn" id="add-player-submit">Load!</button>
   <% end %>
 
-  <div class="menu-btn" id="control-add-player-back">Go back</div>
+  <button class="menu-btn" id="control-add-player-back">Go back</button>
 </div>
 
 <div id="control-player" class="control">
   <h4>Edit Player:</h4>
+  <button class="menu-btn" id="control-player-spawn">Change Spawn Point</button>
+  <button class="menu-btn" id="control-player-change-spritesheet">Change Spritesheet</button>
+  <button class="menu-btn" id="control-player-back">Go back</button>
+  <div id="control-player-help-text">
+  </div>
 </div>
