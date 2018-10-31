@@ -5,7 +5,7 @@ function loadFile(file, options){
   let name = file.name;
   // key is the name without the extension, e.g. if name: "image.png", key: "image"
   let key = name.substring(0, name.lastIndexOf('.'));
-  let type = typeAndExt[0];
+  let type = options.type || typeAndExt[0];
   let fileType = typeAndExt[1];
   (options.onload || function(){})({name, key, type, fileType});
 }

@@ -7,7 +7,7 @@ class PHConfig {
     this.physics = config.physics || {
       default: 'arcade',
       arcade: {
-        gravity: {y: 500}
+        gravity: {y: 0}
       }
     };
     this.scene = config.scene || ['PreloaderScene', 'GameScene'];

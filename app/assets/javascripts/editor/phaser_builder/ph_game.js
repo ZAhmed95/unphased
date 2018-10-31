@@ -28,6 +28,13 @@ class PHGame {
   }
 
   static import(json){
+    if (!json.config){
+      // this is a brand new game
+      var game = new PHGame(json);
+      game.init = true;
+      return game;
+    }
+    // otherwise, import data from the json
     var config = {};
     config.name = json.name;
     config.config = PHConfig.import(json.config);

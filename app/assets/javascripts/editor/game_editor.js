@@ -11,20 +11,30 @@ function createGameEditor(config){
   let currentControl = controlMenu;
   const controlAssets = $('#control-assets').detach();
   const controlLoadMap = $('#control-load-map').detach();
+  const controlAddPlayer = $('#control-add-player').detach();
+  const controlPlayer = $('#control-player').detach();
   
-  editor = new Phaser.Game({
-    type: Phaser.AUTO,
-    parent: 'display',
-    width: display.width(),
-    height: display.height(),
-    scene: [EditorScene]
-  })
-
-  // the gamejs object is a node tree representation of the phaser game being built by the user.
-  // when the game is saved to the server, the tree will be parsed and concatenated into one JS file
-  editor.gamejs = PHGame.import(config);
-  // get the current scene being worked on
-  editor.currentScene = editor.gamejs.scenes[1];
+  if (!config.config){
+    // new game, we'll create a new PHGame instance and save it,
+    // then come back to this page
+    editor = {};
+  }
+  else {
+    editor = new Phaser.Game({
+      type: Phaser.AUTO,
+      parent: 'display',
+      width: display.width(),
+      height: display.height(),
+      physics: {
+        default: 'arcade',
+        arcade: {
+          gravity: {y: 0}
+        }
+      },
+      scene: [EditorScene]
+    });
+    editor.editScene = editor.scene.scenes[0];
+  }
 
   // editor interface functions, anything the user can do in the GUI to affect the game,
   // goes through one of these functions
@@ -120,10 +130,18 @@ function createGameEditor(config){
   // on the controls main menu:
   $('#load-assets').click(()=>{
     editor.swapControls(controlAssets);
-  })
+  });
   $('#load-map').click(()=>{
     editor.swapControls(controlLoadMap);
-  })
+  });
+  $('#add-player').click(()=>{
+    if (config.scenes[1].player){
+      editor.swapControls(controlPlayer);
+    }
+    else {
+      editor.swapControls(controlAddPlayer);
+    }
+  });
   $('#save-game').click(editor.saveGame);
 
   // on the controls for load assets: 
@@ -174,4 +192,61 @@ function createGameEditor(config){
   body.on('click', '#control-load-map-back', ()=>{
     editor.swapControls(controlMenu);
   });
+
+  // on the controls for add player:
+  body.on('click', '#add-player-submit', (event)=>{
+    var files = $('#load-player-spritesheet-input')[0].files;
+    if (files.length < 1){
+      notify({
+        message: 'You have to choose a file first.',
+        type: 'danger'
+      })
+      return;
+    }
+    var file = files[0];
+    var frameWidth = $('#control-add-player input[name=width]')[0];
+    var frameHeight = $('#control-add-player input[name=height]')[0];
+    if (!frameWidth.value || !frameHeight.value){
+      notify({
+        message: 'You have to enter values for frame width and height.',
+        type: 'danger'
+      });
+      return;
+    }
+    loadFile(file, {
+      type: 'spritesheet',
+      onload: (result)=>{
+        result.frameWidth = frameWidth.value;
+        result.frameHeight = frameHeight.value;
+        editor.gamejs.assets.set(result);
+        editor.currentScene.player = {
+          startX: 50,
+          startY: 50,
+          key: result.key
+        }
+        Rails.fire($('#load-player-spritesheet-form')[0], 'submit');
+        notify({
+          message: "Added player.",
+          type: 'success'
+        });
+      }
+    })
+  });
+
+  body.on('click', '#control-add-player-back', ()=>{
+    editor.swapControls(controlMenu);
+  });
+
+  // the gamejs object is a node tree representation of the phaser game being built by the user.
+  // when the game is saved to the server, the tree will be parsed and concatenated into one JS file
+  editor.gamejs = PHGame.import(config);
+  // get the current scene being worked on
+  editor.currentScene = editor.gamejs.scenes[1];
+  // if gamejs was newly created, save it immediately
+  if (editor.gamejs.init){
+    // save the newly created game
+    $('#save-game').click();
+    // refresh the page
+    location.reload();
+  }
 }

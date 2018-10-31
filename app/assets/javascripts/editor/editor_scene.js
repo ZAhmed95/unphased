@@ -27,12 +27,18 @@ function createEditorScene(config){
       this.cam.moveUpBound = this.game.config.height * 0.1;
       this.cam.moveDownBound = this.game.config.height * 0.9;
       // speed that the camera moves at, in game pixels per second
-      this.cam.speed = 150;
+      this.cam.speed = 500;
+      // set camera position from config
+      var configCam = config.scenes[1].camera;
+      this.cam.scrollX = configCam.scrollX;
+      this.cam.scrollY = configCam.scrollY;
       // set camera bounds. If a map exists, it will change the bounds
       this.cam.setBounds(0,0, 0,0);
       this.pointer = this.input.mousePointer;
-      // check if there's a map assosciated with this scene
-      if(config.scenes[1].map){
+      // time to start creating the scene
+      var sceneConfig = config.scenes[1];
+      // create the map if there is one
+      if (sceneConfig.map){
         var map = config.scenes[1].map;
         console.log(map);
         this.map = this.make.tilemap({key: map.key});
@@ -56,6 +62,12 @@ function createEditorScene(config){
         this.cam.setBounds(-100,-100, this.map.widthInPixels+200,this.map.heightInPixels+200);
       }
 
+      // create the player if there is one
+      if (sceneConfig.player){
+        let player = sceneConfig.player;
+        this.player = this.physics.add.sprite(player.startX, player.startY, player.key);
+      }
+
       // create UI text for mouse movement
       this.ui.mouseX = this.add.text(20,20, 'mouseX: 0');
       this.ui.mouseX.setScrollFactor(0);
@@ -75,8 +87,9 @@ function createEditorScene(config){
         }
       });
     }
-    update(time,fps){
-      var delta = 1.0 / fps;
+    update(time,delta){
+      // convert delta to s from ms
+      delta /= 1000;
       // check if we need to move the camera based on mouse position
       this.moveCamera(delta);
     }
@@ -99,19 +112,31 @@ function createEditorScene(config){
     moveCamera(delta){
       var {x,y} = this.getMousePosition(true);
       var moveAmount = this.cam.speed * delta;
+      var moved = false;
       // move left/right
       if (x > this.cam.moveRightBound){
         this.cam.scrollX += moveAmount;
+        moved = true;
       }
       else if (x < this.cam.moveLeftBound){
         this.cam.scrollX -= moveAmount;
+        moved = true;
       }
       // move up/down
       if (y > this.cam.moveDownBound){
         this.cam.scrollY += moveAmount;
+        moved = true;
       }
       else if (y < this.cam.moveUpBound){
         this.cam.scrollY -= moveAmount;
+        moved = true;
+      }
+
+      if (moved){
+        // update the PHGame camera object
+        editor.currentScene.camera.scrollX = this.cam.scrollX;
+        editor.currentScene.camera.scrollY = this.cam.scrollY;
+        moved = false;
       }
     }
   }

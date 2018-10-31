@@ -14,10 +14,7 @@ class GameEditorController < ApplicationController
     @game = current_user.games.create(
       name: params[:game_name],
       game_data: {
-        name: params[:game_name],
-        config: {},
-        assets: {},
-        scenes: [], 
+        name: params[:game_name]
       }
     )
     if @game.valid?

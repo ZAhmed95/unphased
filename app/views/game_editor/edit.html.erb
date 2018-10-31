@@ -11,6 +11,7 @@
         <div class="menu-btn" id="load-assets">Load Assets!</div>
         <div class="menu-btn" id="load-spritesheets">Load Spritesheets!</div>
         <div class="menu-btn" id="load-map">Load Map!</div>
+        <div class="menu-btn" id="add-player">Player</div>
         <%= form_with url: save_game_path(@game), id: 'save-game-form' do |f| %>
           <div class="menu-btn" id="save-game">Save!</div>
         <% end %>
@@ -55,4 +56,22 @@
   <% end %>
 
   <div class="menu-btn" id="control-load-map-back">Go back</div>
+</div>
+
+<div id="control-add-player" class="control">
+  <%= form_with url: load_assets_path(@game), id: 'load-player-spritesheet-form' do |f| %>
+    <h4> Choose player spritesheet: </h4>
+    <%= f.file_field :assets, id: 'load-player-spritesheet-input' %>
+    <%= f.label :width, 'Frame width:' %>
+    <%= f.number_field :width %>
+    <%= f.label :height, 'Frame height:' %>
+    <%= f.number_field :height %>
+    <button type="button" class="menu-btn" id="add-player-submit">Load!</button>
+  <% end %>
+
+  <div class="menu-btn" id="control-add-player-back">Go back</div>
+</div>
+
+<div id="control-player" class="control">
+  <h4>Edit Player:</h4>
 </div>

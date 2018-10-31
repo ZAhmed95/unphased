@@ -3,6 +3,8 @@ class PHScene {
     this.game = config.game;
     this.name = config.name;
     this.map = config.map;
+    this.player = config.player;
+    this.camera = config.camera || {scrollX: 0, scrollY: 0};
     this.preload = config.preload || new JSFunctionDefinition({name:'preload' , classMethod: true});
     this.create = config.create || new JSFunctionDefinition({name:'create' , classMethod: true});
     this.update = config.update || new JSFunctionDefinition({name:'update' , classMethod: true, params: ['time','delta']});
@@ -49,6 +51,8 @@ class PHScene {
     config.name = json.name;
     config.game = json.game;
     config.map = json.map;
+    config.camera = json.camera;
+    config.player = json.player;
     config.preload = JSFunctionDefinition.import(json.preload);
     config.create = JSFunctionDefinition.import(json.create);
     config.update = JSFunctionDefinition.import(json.update);
@@ -57,7 +61,9 @@ class PHScene {
 
   export(){
     var out = this.to_json();
+    // optional exports
     if (this.map) out.map = this.map;
+    if (this.player) out.player = this.player;
     return out;
   }
 
@@ -78,6 +84,7 @@ class ${this.name} extends Phaser.Scene {
     return {
       name: this.name,
       type: 'Scene',
+      camera: this.camera,
       preload: this.preload.export(),
       create: this.create.export(),
       update: this.update.export(),
