@@ -2,24 +2,44 @@
 class PHGame {
   constructor(config){
     this.name = config.name;
-    this.assets = new PHAssetManager(this);
+    this.config = config.config || new PHConfig();
+    this.assets = config.assets || new PHAssetManager({game: this});
+    this.scenes = config.scenes || createDefaultScenes.call(this);
 
-    // default game starts with two scenes: Preloader and Game
-    // users can add more
-    const preloaderScene = new PHScene({game: this, name: 'PreloaderScene'});
-    // the preloader will immediately start the GameScene when its create function is called
-    // user can change which scene it calls
-    preloaderScene.create.statements.push(new JSStatement("this.scene.start('GameScene');"));
+    function createDefaultScenes(){
+      // default game starts with two scenes: Preloader and Game
+      // users can add more
+      const preloaderScene = new PHScene({game: this, name: 'PreloaderScene'});
+      // the preloader will immediately start the GameScene when its create function is called
+      // user can change which scene it calls
+      preloaderScene.create.statements.push(new JSStatement("this.scene.start('GameScene');"));
 
-    const gameScene = new PHScene({game: this, name: 'GameScene'});
+      const gameScene = new PHScene({game: this, name: 'GameScene'});
 
-    this.scenes = [preloaderScene, gameScene];
+      return [preloaderScene, gameScene];
+    }
   }
 
   build(){
-    var assets = this.assets.buildAssets();
-    this.scenes.forEach((scene)=>{scene.build()});
-    return assets + this.to_js();
+    // generates all the code to load all assets
+    this.assets.loadAssets();
+    // to_js will recursively call build on child components
+    return this.to_js();
+  }
+
+  static import(json){
+    var config = {};
+    config.name = json.name;
+    config.config = PHConfig.import(json.config);
+    config.assets = PHAssetManager.import(json.assets);
+    config.scenes = json.scenes.map((scene)=>{
+      return PHScene.import(scene);
+    })
+    var game = new PHGame(config);
+    // asset manager and scenes all need reference to game
+    game.assets.game = game;
+    game.scenes.forEach((scene)=>{scene.game = game});
+    return game;
   }
 
   export(){
@@ -32,31 +52,21 @@ class PHGame {
     return `
 ${
   this.scenes.map((scene)=>{
-    return scene.to_js();
+    return scene.build();
   }).join('\n')
 }
 
-game = new Phaser.Game({
-  type: Phaser.AUTO,
-  width: 1200,
-  height: 800,
-  parent: parent,
-  physics: {
-    default: 'arcade',
-    arcade: {
-      gravity: {y: 500},
-    }
-  },
-  scene: [${this.scenes.map((scene)=>{return scene.name}).join(',')}]
-})
+const config = ${this.config.build()}
+
+game = new Phaser.Game(config);
 `
   }
 
   to_json(){
     return {
       name: this.name,
-      type: 'Game',
       assets: this.assets.export(),
+      config: this.config.export(),
       scenes: this.scenes.map((scene)=>{return scene.export()})
     }
   }

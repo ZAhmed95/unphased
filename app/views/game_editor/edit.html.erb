@@ -1,7 +1,7 @@
 <%= stylesheet_link_tag 'editor' %>
 <%= javascript_include_tag 'editor' %>
 
-<div id="user-data" data-user-id="<%= current_user.id %>" data-game-id="<%= @game.id %>">
+<div id="user-data" data-user-id="<%= current_user.id %>" data-game-id="<%= current_game.id %>">
 </div>
 
 <div class="container-fluid" id="editor-container">
@@ -11,9 +11,8 @@
         <div class="menu-btn" id="load-assets">Load Assets!</div>
         <div class="menu-btn" id="load-spritesheets">Load Spritesheets!</div>
         <div class="menu-btn" id="load-map">Load Map!</div>
-        <%= form_with url: '/editor/save', id: 'save-game-form' do |f| %>
+        <%= form_with url: save_game_path(@game), id: 'save-game-form' do |f| %>
           <div class="menu-btn" id="save-game">Save!</div>
-          <%= f.submit 'Submit' %>
         <% end %>
       </div>
     </div>
@@ -24,8 +23,8 @@
 
   <div id="editor-toolbar">
     <div class="row">
-      <div class="col-6" id="test-button">
-        <button type="button" class="menu-btn"> Test! </button>
+      <div class="col-6" id="play-button">
+        <%= link_to 'Play!', play_game_path(@game), class: 'menu-btn' %>
       </div>
       <div class="col-6" id="download-button">
         <button type="button" class="menu-btn"> Download! </button>
@@ -34,33 +33,13 @@
   </div>
 </div>
 
-<div class="container-fluid" id="test-container">
-  <div id="test-game">
-  </div>
-
-  <div id="test-toolbar">
-    <div class="row">
-      <div class="col" id="edit-button">
-        <button type="button" class="menu-btn"> Edit! </button>
-      </div>
-    </div>
-  </div>
-
-</div>
-
 <!-- these are the other control panes, they start out hidden -->
 <!-- only one shows at any given time on the controls section -->
 <div id="control-assets" class="control">
 
-  <form action="#" id="assets-form">
+  <%= form_with url: load_assets_path(@game), id: 'load-assets-form' do |f| %>
     <h4>Load Assets:</h4>
-    <input multiple="multiple" type="file" name="assets[]" id="input-assets">
-    <input type="submit" class="menu-btn" value="Load!" id="assets-form-submit">
-  </form>
-
-  <%= form_with url: '/editor/load-assets', id: 'load-assets-form' do |f| %>
-    <h4>Load Assets:</h4>
-    <%= f.file_field :assets, multiple: true %>
+    <%= f.file_field :assets, multiple: true, id: 'load-assets-input' %>
     <button type="button" class="menu-btn" id="load-assets-submit">Load!</button>
   <% end %>
 
@@ -69,11 +48,11 @@
 
 <div id="control-load-map" class="control">
 
-  <form action="#" id="load-map-form">
+  <%= form_with url: load_assets_path(@game), id: 'load-map-form' do |f| %>
     <h4> Load map JSON (Tiled format): </h4>
-    <input type="file" name="map" id="input-map">
-    <input type="submit" class="menu-btn" value="Load!" id="map-form-submit">
-  </form>
+    <%= f.file_field :assets, id: 'load-map-input' %>
+    <button type="button" class="menu-btn" id="load-map-submit">Load!</button>
+  <% end %>
 
   <div class="menu-btn" id="control-load-map-back">Go back</div>
 </div>

@@ -4,7 +4,7 @@
       <h1> Choose a name for your game </h1>
       <div class="spacer"></div>
       <div class="user-form-container">
-        <%= form_with url: new_game_path do |f| %>
+        <%= form_with url: editor_path do |f| %>
           <%= f.label :game_name %><br />
           <%= f.text_field :game_name, autofocus: true %>
           

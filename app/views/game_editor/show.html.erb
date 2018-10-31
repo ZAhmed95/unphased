@@ -1,0 +1,21 @@
+<%= stylesheet_link_tag 'editor' %>
+<%= javascript_include_tag 'playgame' %>
+
+<div id="user-data" data-user-id="<%= @game.user_id %>" data-game-id="<%= @game.id %>">
+</div>
+
+<div class="container-fluid" id="test-container">
+  <div id="play-game">
+  </div>
+
+  <% if @game.user_id == current_user.id %>
+  <div id="play-toolbar">
+    <div class="row">
+      <div class="col" id="edit-button">
+        <%= link_to 'Edit!', edit_game_path(@game), class: 'menu-btn' %>
+        
+      </div>
+    </div>
+  </div>
+  <% end %>
+</div>

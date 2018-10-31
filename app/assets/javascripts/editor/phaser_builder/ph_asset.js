@@ -2,44 +2,70 @@ class PHAsset {
   constructor(config){
     this.assetManager = config.assetManager;
     this.name = config.name;
-    this.key = key;
+    this.key = config.key;
     this.type = config.type;
     this.fileType = config.fileType;
     this.data = config.data;
+    this.frameWidth = config.frameWidth;
+    this.frameHeight = config.frameHeight;
   }
 
   path(){
-    return this.assetManager.baseURL + this.name;
+    return this.assetManager.baseURL;
+  }
+
+  static import(json){
+    return new PHAsset(json);
   }
 
   export(){
     return this.to_json();
   }
 
-  to_js(){
-    var key = this.key();
-    var path = this.path();
+  getLoadStatement(path){
+    var key = this.key;
+    var path = (path || this.path()) + this.name;
+    var code;
     switch(this.type){
       case 'image':
-      return `this.load.image('${key}', '${path}');`
+      code = `this.load.image('${key}', '${path}');`
+      break;
 
       case 'spritesheet':
       let x = this.frameWidth;
       let y = this.frameHeight;
-      return `this.load.spritesheet([{ file: '${path}', key: '${key}', config: { frameWidth: ${x}, frameHeight: ${y} } }]);`
+      code = `this.load.spritesheet('${key}', '${path}', { frameWidth: ${x}, frameHeight: ${y} });`;
+      break;
 
-      case 'application': // this is JSON
-      return `this.cache.json.add('${this.name}', assets['${this.name}']);`
+      case 'json':
+      code = `this.load.json('${key}', '${path}');`;
+      break;
+
+      case 'audio':
+      code = `this.load.audio('${key}', '${path}');`;
+      break;
+
+      case 'map':
+      code = `this.load.tilemapTiledJSON('${key}', '${path}');`;
+      break;
+
     }
+    return new JSStatement(code);
   }
 
   to_json(){
-    return {
+    var out = {
       name: this.name,
+      key: this.key,
       type: this.type,
       path: this.path,
       fileType: this.fileType,
       data: this.data,
     }
+    if (this.frameWidth){
+      out.frameWidth = this.frameWidth;
+      out.frameHeight = this.frameHeight;
+    }
+    return out;
   }
 }

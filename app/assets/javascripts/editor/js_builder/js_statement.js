@@ -3,6 +3,10 @@ class JSStatement {
     this.code = code;
   }
 
+  static import(json){
+    return new JSStatement(json.code);
+  }
+
   export(){
     return this.to_json();
   }
@@ -13,7 +17,6 @@ class JSStatement {
 
   to_json(){
     return {
-      type: 'Statement',
       code: this.code
     }
   }
