@@ -22,7 +22,7 @@ function createGameEditor(config){
 
   // the gamejs object is a node tree representation of the phaser game being built by the user.
   // when the game is saved to the server, the tree will be parsed and concatenated into one JS file
-  editor.gamejs = new PHGame({name: display.data('gameName')});
+  editor.gamejs = PHGame.import(config);
   // get the current scene being worked on
   editor.currentScene = editor.gamejs.scenes[1];
 
