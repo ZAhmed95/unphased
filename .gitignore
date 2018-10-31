@@ -28,6 +28,3 @@
 
 # Ignore planning folder
 /planning/*
-
-# Ignore Gemfile.lock, it's generated on windows
-Gemfile.lock
