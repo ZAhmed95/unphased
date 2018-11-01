@@ -33,7 +33,7 @@ gem 'bootsnap', '>= 1.1.0', require: false
 
 # others
 gem 'jquery-rails'
-gem 'bootstrap', '~> 4.0.0'
+gem 'bootstrap', '>= 4.1.2'
 gem 'devise'
 gem 'active_storage-postgresql'
 
