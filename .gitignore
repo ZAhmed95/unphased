@@ -28,3 +28,6 @@
 
 # Ignore planning folder
 /planning/*
+
+# Ignore test-assets folder
+/test-assets/*
