@@ -48,3 +48,22 @@ h1 {
   height: 400px;
   border-radius: 10px;
 }
+
+.filler-card {
+  height: 200px;
+  padding: 20px;
+}
+
+.game-link-image {
+  height: 80%;
+  background-color: black;
+  background-image: image_url('phaser-logo.png');
+  background-size: contain;
+  background-position: center;
+  background-repeat: no-repeat;
+  border-radius: $radius * 2;
+}
+
+.game-link-text {
+  text-align: center;
+}

@@ -17,11 +17,13 @@ class GameEditorController < ApplicationController
         name: params[:game_name]
       }
     )
-    if @game.valid?
-      session[:game_id] = @game.id
-      redirect_to editor_path
-    else
-      redirect_to new_game_path
+    respond_to do |format|
+      if @game.valid?
+        session[:game_id] = @game.id
+        format.js {render 'new_game'}
+      else
+        format.js {render 'new_game_failed'}
+      end
     end
   end
 

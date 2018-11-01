@@ -27,27 +27,6 @@ function loadJSON(file, options){
   fr.readAsText(file);
 }
 
-// helper function to generate bootstrap notifications
-function notify(config){
-  $.notify({
-    //options
-    message: config.message
-  }, {
-    //settings
-    type: config.type || 'notice',
-    delay: 1000,
-    allow_dismiss: false,
-    placement: {
-      from: 'bottom',
-      align: 'right',
-    },
-    animate: {
-      enter: "animated fadeInDown",
-      exit: "animated fadeOutDown",
-    }
-  })
-}
-
 function loadGameData(callback){
   const gameId = $('#user-data')[0].dataset.gameId;
   // make request to server to retrieve game json data

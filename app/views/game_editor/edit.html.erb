@@ -7,12 +7,15 @@
 <div class="container-fluid" id="editor-container">
   <div class="row no-gutters">
     <div class="col-2 bg-light" id="controls">
+    <div id="logo-img">
+    </div>
+    <div class="spacer"></div>
       <div id="control-menu" class="control">
-        <div class="menu-btn" id="load-assets">Load Assets!</div>
-        <div class="menu-btn" id="load-map">Map</div>
-        <div class="menu-btn" id="add-player">Player</div>
+        <button class="menu-btn" id="load-assets">Load Assets!</button>
+        <button class="menu-btn" id="load-map">Map</button>
+        <button class="menu-btn" id="add-player">Player</button>
         <%= form_with url: save_game_path(@game), id: 'save-game-form' do |f| %>
-          <div class="menu-btn" id="save-game">Save!</div>
+          <button class="menu-btn" id="save-game">Save!</button>
         <% end %>
       </div>
     </div>
@@ -27,7 +30,7 @@
         <%= link_to 'Play!', play_game_path(@game), class: 'menu-btn' %>
       </div>
       <div class="col-6" id="download-button">
-        <button type="button" class="menu-btn"> Download! </button>
+        <%= link_to 'Dashboard', editor_path, class: 'menu-btn' %>
       </div>
     </div>
   </div>

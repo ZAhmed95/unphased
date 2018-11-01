@@ -1,5 +1,9 @@
 <div class="col col-md-6 col-lg-3">
   <div class="filler-card">
-  <%= link_to game.name, edit_game_path(game) %>
+    <%= link_to edit_game_path(game) do %>
+      <div class="game-link-image">
+      </div>
+    <% end %>
+    <h5 class="game-link-text"><%= link_to game.name, edit_game_path(game) %></h5>
   </div>
 </div>

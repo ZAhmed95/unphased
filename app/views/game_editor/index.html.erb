@@ -1,6 +1,8 @@
 
-Logged in as: <%= current_user.email %>
-<%= link_to 'Log out', destroy_session_path(:user), method: :delete %>
+<div> 
+  Logged in as: <%= current_user.email %>
+  <%= link_to 'Log out', destroy_session_path(:user), method: :delete %>
+</div>
 <section id="home-section-1">
   <div class="row">
     <div class="col col-lg-2 offset-lg-5 text-center">

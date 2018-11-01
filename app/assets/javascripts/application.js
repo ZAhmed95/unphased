@@ -16,3 +16,23 @@
 //= require bootstrap
 //= require bootstrap-notify
 
+// helper function to generate bootstrap notifications
+function notify(config){
+  $.notify({
+    //options
+    message: config.message
+  }, {
+    //settings
+    type: config.type || 'notice',
+    delay: 1000,
+    allow_dismiss: false,
+    placement: {
+      from: 'bottom',
+      align: 'right',
+    },
+    animate: {
+      enter: "animated fadeInDown",
+      exit: "animated fadeOutDown",
+    }
+  })
+}

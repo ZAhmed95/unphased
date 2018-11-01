@@ -37,7 +37,7 @@ function createGameEditor(config){
   }
 
   // initialize some of the controllers
-  if (config.scenes[1].map){
+  if (config.scenes && config.scenes[1].map){
     let map = config.scenes[1].map;
     controlMap.layers = [];
     let layersContainer = controlMap.find('#control-map-collision-layers')[0];
