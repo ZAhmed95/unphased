@@ -22,17 +22,34 @@ class PHScene {
   }
 
   build(){
+    var cursors = false;
+    // initial setup
+    this.addStatements({
+      functionName: "create",
+      statements: [
+        `this.cam = this.cameras.main;`
+      ]
+    })
+    // map setup
     if (this.map){
       let tilesetKeys = this.map.tilesets.map((tileset)=>{return tileset.key});
       let tilesetStatements = tilesetKeys.map((key)=>{
         return `this.map.tilesetImages['${key}'] = this.map.addTilesetImage('${key}');`;
       });
       let layerStatements = this.map.layers.map((layer)=>{
-        return `this.map.tileLayers['${layer.name}'] = this.map.createDynamicLayer('${layer.name}', tilesets, 0, 0);`
+        return `
+        this.map.tileLayers['${layer.name}'] = this.map.createDynamicLayer('${layer.name}', tilesets, 0, 0);
+        ${layer.collides ? 
+          `this.map.tileLayers['${layer.name}'].setCollisionByExclusion([-1]);
+          this.collisionLayers.push(this.map.tileLayers['${layer.name}']);
+          `
+          : ''}
+        `
       });
       this.addStatements({
         functionName: "create", 
         statements: [
+          `this.collisionLayers = [];`,
           `this.map = this.make.tilemap({key: '${this.map.key}'});`,
           `this.map.tilesetImages = {};`,
           `this.map.tileLayers = {};`,
@@ -41,6 +58,48 @@ class PHScene {
           ...layerStatements,
         ],
         index: 0,
+      })
+    }
+    // player setup
+    if (this.player){
+      cursors = true;
+      this.addStatements({
+        functionName: "create",
+        statements: [
+          `this.player = this.physics.add.sprite(${this.player.startX}, ${this.player.startY}, '${this.player.key}');`,
+          `this.player.speed = 200;`,
+          `this.collisionLayers.map((layer)=>{
+            this.physics.add.collider(this.player, layer);
+          });`,
+          `this.cam.startFollow(this.player);`
+        ]
+      });
+      this.addStatements({
+        functionName: "update",
+        statements: [
+          `this.player.setVelocity(0);`,
+          `if (this.cursors.right.isDown){
+            this.player.setVelocityX(this.player.speed);
+          }`,
+          `else if (this.cursors.left.isDown){
+            this.player.setVelocityX(-this.player.speed);
+          }`,
+          `if (this.cursors.up.isDown){
+            this.player.setVelocityY(-this.player.speed);
+          }`,
+          `else if (this.cursors.down.isDown){
+            this.player.setVelocityY(this.player.speed);
+          }`,
+          `this.player.body.velocity.normalize().scale(this.player.speed);`
+        ]
+      })
+    }
+    if (cursors){
+      this.addStatements({
+        functionName: 'create',
+        statements: [
+          `this.cursors = this.input.keyboard.createCursorKeys();`
+        ]
       })
     }
     return this.to_js();

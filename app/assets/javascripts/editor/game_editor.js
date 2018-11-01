@@ -11,9 +11,10 @@ function createGameEditor(config){
   let currentControl = controlMenu;
   const controlAssets = $('#control-assets').detach();
   const controlLoadMap = $('#control-load-map').detach();
+  const controlMap = $('#control-map').detach();
   const controlAddPlayer = $('#control-add-player').detach();
   const controlPlayer = $('#control-player').detach();
-  
+
   if (!config.config){
     // new game, we'll create a new PHGame instance and save it,
     // then come back to this page
@@ -32,6 +33,19 @@ function createGameEditor(config){
         }
       },
       scene: [EditorScene]
+    });
+  }
+
+  // initialize some of the controllers
+  if (config.scenes[1].map){
+    let map = config.scenes[1].map;
+    controlMap.layers = [];
+    let layersContainer = controlMap.find('#control-map-collision-layers')[0];
+    map.layers.map((layer, index)=>{
+      let input = $.parseHTML(`<div><input type="checkbox" name="map-layer-${index}" id="map-layer-${index}" value="${layer.name}"> ${layer.name} </div>`)[0];
+      if (layer.collides) $(input).find('input')[0].checked = true;
+      controlMap.layers.push(input);
+      layersContainer.append(input);
     });
   }
 
@@ -135,7 +149,8 @@ function createGameEditor(config){
     editor.swapControls(controlAssets);
   });
   $('#load-map').click(()=>{
-    editor.swapControls(controlLoadMap);
+    if (editor.currentScene.map) editor.swapControls(controlMap);
+    else editor.swapControls(controlLoadMap);
   });
   $('#add-player').click(()=>{
     if (config.scenes[1].player){
@@ -193,6 +208,27 @@ function createGameEditor(config){
   });
 
   body.on('click', '#control-load-map-back', ()=>{
+    editor.swapControls(controlMenu);
+  });
+
+  // on the controls for map:
+  body.on('click', '#control-map-change-map', ()=>{
+    editor.swapControls(controlLoadMap);
+  });
+
+  body.on('click', '#control-map-save-collision-layers', ()=>{
+    controlMap.layers.map((layerDiv, index)=>{
+      let input = $(layerDiv).find('input')[0];
+      console.log(input);
+      editor.currentScene.map.layers[index].collides = input.checked;
+    });
+    notify({
+      message: 'Updated map collision layers.',
+      type: 'success'
+    })
+  });
+
+  body.on('click', '#control-map-back', ()=>{
     editor.swapControls(controlMenu);
   });
 

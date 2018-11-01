@@ -9,7 +9,7 @@
     <div class="col-2 bg-light" id="controls">
       <div id="control-menu" class="control">
         <div class="menu-btn" id="load-assets">Load Assets!</div>
-        <div class="menu-btn" id="load-map">Load Map!</div>
+        <div class="menu-btn" id="load-map">Map</div>
         <div class="menu-btn" id="add-player">Player</div>
         <%= form_with url: save_game_path(@game), id: 'save-game-form' do |f| %>
           <div class="menu-btn" id="save-game">Save!</div>
@@ -43,7 +43,7 @@
     <button type="button" class="menu-btn" id="load-assets-submit">Load!</button>
   <% end %>
 
-  <button class="menu-btn" id="control-assets-back">Go back</button>
+  <button class="menu-btn" id="control-assets-back">Main Menu</button>
 </div>
 
 <div id="control-load-map" class="control">
@@ -54,7 +54,17 @@
     <button type="button" class="menu-btn" id="load-map-submit">Load!</button>
   <% end %>
 
-  <button class="menu-btn" id="control-load-map-back">Go back</button>
+  <button class="menu-btn" id="control-load-map-back">Main Menu</button>
+</div>
+
+<div id="control-map" class="control">
+  <h4>Change tilemap:</h4>
+  <button class="menu-btn" id="control-map-change-map">Change Map</button>
+  <h4>Choose Collision Layers:</h4>
+  <div id="control-map-collision-layers">
+  </div>
+  <button class="menu-btn" id="control-map-save-collision-layers">Update</button>
+  <button class="menu-btn" id="control-map-back">Main Menu</button>
 </div>
 
 <div id="control-add-player" class="control">
@@ -68,14 +78,14 @@
     <button type="button" class="menu-btn" id="add-player-submit">Load!</button>
   <% end %>
 
-  <button class="menu-btn" id="control-add-player-back">Go back</button>
+  <button class="menu-btn" id="control-add-player-back">Main Menu</button>
 </div>
 
 <div id="control-player" class="control">
   <h4>Edit Player:</h4>
   <button class="menu-btn" id="control-player-spawn">Change Spawn Point</button>
   <button class="menu-btn" id="control-player-change-spritesheet">Change Spritesheet</button>
-  <button class="menu-btn" id="control-player-back">Go back</button>
+  <button class="menu-btn" id="control-player-back">Main Menu</button>
   <div id="control-player-help-text">
   </div>
 </div>
