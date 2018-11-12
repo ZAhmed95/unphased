@@ -6,7 +6,7 @@ Unphased is a fully graphical and interactive application that allows users to c
 
 Unphased is a graphical wrapper for the Phaser 3 game making framework. This means that all you have to do is click on buttons or drag and drop files, and Unphased writes all the code for you.
 Anything you would be able to do by simply using Phaser to write your game, you can do with Unphased.
-*at least, that's the goal. We're not quite there yet :)*
+*At least, that's the goal. We're not quite there yet :)*
 
 ## Features (v1.0.0)
 
