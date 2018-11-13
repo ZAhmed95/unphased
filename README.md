@@ -1,6 +1,6 @@
 # UNPHASED
 
-Unphased is a fully graphical and interactive application that allows users to create stunning browser games without needing a drop of programming knowledge. [Check it out here](https://phaser-game-maker.herokuapp.com)
+Unphased is a fully graphical and interactive application that allows users to create stunning browser games without needing a drop of programming knowledge. [Check it out here](https://phaser-game-maker.herokuapp.com) (Use username: test@gmail.com and password: 123456 for testing)
 
 ## How it works
 
